@@ -34,13 +34,7 @@ setwd("/Users/florarosenzweig/Documents/MATLAB/PROJECTS/XP_Audio_DutyCycles/Post
 # Load the ITI data into a dataframe
 itiData <- read.csv("itiDataLongFormat.csv")
 
-# Load stability data into dataframe
-stability_data <- read.csv("stabilityALLcondsYOUNG_4stats.csv")
 
-
-# Load the FFT data
-final_table_15Hz_TAP <- read.csv("final_table_15Hz_ordered.csv")
-final_table_15Hz_EEG <- read.csv("final_table_15Hz_EEG_ordered.csv") # Averaged Individual Data 
 df <- read.csv("AggregatedTAPDataForR_Individual.csv")  # All Individual Data 
 stimCochmod <- read.csv("StimZscoresCochModelAN.csv") # Read stimulus data for cochlear model
 
@@ -987,27 +981,6 @@ plotAvgITIError<- ggplot(allMedITI, aes(x = Condition, y =avgMedError, fill = Co
 print(plotAvgITIError)
 ggsave("AvgITIError.svg", plot = plotAvgITIError,  width = 20, height = 15, units = "cm", device = 'svg')
 
-#------------------------------- Stability -----------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------
-
-#Factor all variables 
-stability_data$DutyCycle <- factor(stability_data$DutyCycle)
-stability_data$SubjectID <- factor(stability_data$SubjectID)
-
-# PLOT and save Average MEDIAN ITIs for each condition (4 Median ITIs value/condition/ participant)
-plotStability<- ggplot(stability_data, aes(x = DutyCycle, y =Rvalue, fill = DutyCycle, colour = DutyCycle)) +
-  geom_flat_violin(position = position_nudge(x = .1, y = 0), adjust = 2, trim = FALSE,, alpha = 0.3) +
-  geom_point(position = position_jitter(width = .08), size = 2) +
-  geom_boxplot(aes(x = as.numeric(DutyCycle) + 0.25, y = Rvalue), outlier.shape = NA, alpha = 0.3, width = .1, colour = "BLACK") +
-  ylab('Average Median ITI') + xlab('Duty Cycle (%)') + theme_cowplot() + guides(fill = FALSE, colour = FALSE) +
-  ggtitle("Trial Averaged Median ITIs") +
-  scale_y_continuous(breaks = c(0, 0.5, 1), limits = c(0, 1.2)) + # Adjusting y-axis limits and breaks
-  scale_colour_manual(values = matlab_colors) +
-  scale_fill_manual(values = matlab_colors)
-
-
-print(plotStability)
-ggsave("Stability.svg", plot = plotStability, width = 8, height = 6, device = 'svg')
 
 #--------------------------------------------------------------------------------------------------------------------------------
 # Statistical Analysis
